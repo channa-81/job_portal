@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.channa.jobx_portal.dto.CandidateDTO;
 import com.channa.jobx_portal.entity.Candidate;
+import com.channa.jobx_portal.exception.ResourceNotFoundException;
 import com.channa.jobx_portal.repositary.CandidateRepository;
 import com.channa.jobx_portal.service.CandidateService;
 
@@ -39,7 +40,7 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public CandidateDTO getCandidateById(Long id) {
         Candidate candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        		.orElseThrow(() -> new ResourceNotFoundException("Candidate not found"));
         return mapToDTO(candidate);
     }
 
@@ -47,7 +48,7 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public CandidateDTO updateCandidate(Long id, CandidateDTO dto) {
         Candidate candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        		.orElseThrow(() -> new ResourceNotFoundException("Candidate not found"));
 
         candidate.setName(dto.getName());
         candidate.setEmail(dto.getEmail());

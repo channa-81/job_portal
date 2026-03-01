@@ -2,11 +2,16 @@ package com.channa.jobx_portal.service.imple;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.channa.jobx_portal.dto.JobDTO;
 import com.channa.jobx_portal.entity.Company;
 import com.channa.jobx_portal.entity.Job;
+import com.channa.jobx_portal.exception.ResourceNotFoundException;
 import com.channa.jobx_portal.repositary.CompanyRepository;
 import com.channa.jobx_portal.repositary.JobRepository;
 import com.channa.jobx_portal.service.JobService;
@@ -27,7 +32,7 @@ public class JobServiceImpl implements JobService {
 
         // Fetch company from DB
         Company company = companyRepository.findById(dto.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+        		.orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
         Job job = new Job();
         job.setTitle(dto.getTitle());
@@ -41,19 +46,32 @@ public class JobServiceImpl implements JobService {
     }
 
     // GET ALL JOBS
+//    @Override
+//    public List<JobDTO> getAllJobs() {
+//        return jobRepository.findAll()
+//                .stream()
+//                .map(this::mapToDTO)
+//                .toList();
+//    }
+    
     @Override
-    public List<JobDTO> getAllJobs() {
-        return jobRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+    public Page<JobDTO> getAllJobs(int page, int size, String sortBy, String direction) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return jobRepository.findAll(pageable)
+                .map(this::mapToDTO);
     }
 
     // GET JOB BY ID
     @Override
     public JobDTO getJobById(Long id) {
         Job job = jobRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+        		.orElseThrow(() -> new ResourceNotFoundException("Job not found"));
 
         return mapToDTO(job);
     }
@@ -72,7 +90,7 @@ public class JobServiceImpl implements JobService {
     public JobDTO updateJob(Long id, JobDTO dto) {
 
         Job job = jobRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+        		.orElseThrow(() -> new ResourceNotFoundException("Job not found"));
 
         job.setTitle(dto.getTitle());
         job.setDescription(dto.getDescription());
@@ -81,7 +99,7 @@ public class JobServiceImpl implements JobService {
         // update company if changed
         if (dto.getCompanyId() != null) {
             Company company = companyRepository.findById(dto.getCompanyId())
-                    .orElseThrow(() -> new RuntimeException("Company not found"));
+            		.orElseThrow(() -> new ResourceNotFoundException("Company not found"));
             job.setCompany(company);
         }
 

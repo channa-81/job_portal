@@ -2,6 +2,7 @@ package com.channa.jobx_portal.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,9 +34,20 @@ public class JobController {
     }
 
     // GET ALL JOBS
+//    @GetMapping
+//    public List<JobDTO> getAllJobs() {
+//        return jobService.getAllJobs();
+//    }
+    
+    
     @GetMapping
-    public List<JobDTO> getAllJobs() {
-        return jobService.getAllJobs();
+    public Page<JobDTO> getAllJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        return jobService.getAllJobs(page, size, sortBy, direction);
     }
 
     // GET JOB BY ID

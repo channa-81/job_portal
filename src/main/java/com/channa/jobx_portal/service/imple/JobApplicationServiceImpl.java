@@ -9,6 +9,7 @@ import com.channa.jobx_portal.dto.JobApplicationDTO;
 import com.channa.jobx_portal.entity.Candidate;
 import com.channa.jobx_portal.entity.Job;
 import com.channa.jobx_portal.entity.JobApplication;
+import com.channa.jobx_portal.exception.ResourceNotFoundException;
 import com.channa.jobx_portal.repositary.CandidateRepository;
 import com.channa.jobx_portal.repositary.JobApplicationRepository;
 import com.channa.jobx_portal.repositary.JobRepository;
@@ -30,10 +31,10 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public JobApplicationDTO applyForJob(Long jobId, Long candidateId) {
 
         Job job = jobRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+        		.orElseThrow(() -> new ResourceNotFoundException("Job not found"));
 
         Candidate candidate = candidateRepository.findById(candidateId)
-                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        		.orElseThrow(() -> new ResourceNotFoundException("Candidate not found"));
 
         JobApplication application = new JobApplication();
         application.setJob(job);
