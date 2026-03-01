@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.channa.jobx_portal.dto.CompanyDTO;
 import com.channa.jobx_portal.service.CompanyService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+
+@Tag(name = "Company APIs", description = "Operations related to Companies")
 @RestController
 @RequestMapping("/api/companies")
 @RequiredArgsConstructor
@@ -29,7 +32,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
    
-
+    @Operation(summary = "Create new company")
     @PostMapping
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO dto) {
         return new ResponseEntity<>(companyService.createCompany(dto), HttpStatus.CREATED);
@@ -41,6 +44,7 @@ public class CompanyController {
 //    }
 
 //    Getting companies with structured set of numbers using page nation.
+    @Operation(summary = "Get companys")
     @GetMapping
     public Page<CompanyDTO> getAllCompanies(
             @RequestParam(defaultValue = "0") int page,
@@ -51,16 +55,22 @@ public class CompanyController {
         return companyService.getAllCompanies(page, size, sortBy, direction);
     }
     
+    
+    @Operation(summary = "Get company by id")
     @GetMapping("/{id}")
     public CompanyDTO getById(@PathVariable Long id) {
         return companyService.getCompanyById(id);
     }
 
+    
+    @Operation(summary = "Update company by id")
     @PutMapping("/{id}")
     public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO dto) {
         return companyService.updateCompany(id, dto);
     }
 
+    
+    @Operation(summary = "Delete company by id")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         companyService.deleteCompany(id);

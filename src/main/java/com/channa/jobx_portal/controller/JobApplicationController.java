@@ -1,7 +1,6 @@
 package com.channa.jobx_portal.controller;
 
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.channa.jobx_portal.dto.JobApplicationDTO;
 import com.channa.jobx_portal.service.JobApplicationService;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+
+
+@Tag(name = "Job Application APIs", description = "Apply and view job applications")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

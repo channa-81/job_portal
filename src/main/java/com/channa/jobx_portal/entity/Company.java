@@ -2,6 +2,8 @@ package com.channa.jobx_portal.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,5 +34,6 @@ public class Company {
 
     // One company can have many jobs
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Job> jobs;
 }
